@@ -15,7 +15,7 @@ module Rmre
     end
 
     def create_model_for(table_name, primary_key_name)
-      model_name = table_name.classify
+      model_name = table_name.capitalize
       module_eval <<-ruby_src, __FILE__, __LINE__ + 1
         class #{model_name} < Db
           self.table_name = '#{table_name}'
