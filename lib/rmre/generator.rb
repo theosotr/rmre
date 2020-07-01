@@ -17,7 +17,7 @@ module Rmre
       @include_prefixes = include
       ActiveSupport::Inflector.inflections do |inflect|
         custom_inflections.each do |ci|
-          inflect.plural(/#{ci[:plural].first}/, ci[:plural].second)
+          #inflect.plural(/#{ci[:plural].first}/, ci[:plural].second)
           #inflect.singular(/#{ci[:singular].first}/, ci[:singular].second)
         end if custom_inflections.is_a? Array
       end
@@ -45,7 +45,7 @@ module Rmre
     end
 
     def create_model(table_name)
-      File.open(File.join(output_path, "#{table_name.tableize}.rb"), "w") do |file|
+      File.open(File.join(output_path, "#{table_name}.rb"), "w") do |file|
         constraints = []
 
         foreign_keys.each do |fk|
@@ -91,9 +91,9 @@ module Rmre
     def constraint_src(table_name, fk={})
       src = nil
       if fk['from_table'] == table_name
-        src = "belongs_to :#{fk['to_table'].downcase}, :class_name => '#{fk['to_table'].tableize.capitalize}', :foreign_key => :#{fk['from_column']}"
+        src = "belongs_to :#{fk['to_table'].downcase}, :class_name => '#{fk['to_table'].capitalize}', :foreign_key => :#{fk['from_column']}"
       elsif fk['to_table'] == table_name
-        src = "has_many :#{fk['from_table'].downcase.pluralize}, :class_name => '#{fk['from_table'].tableize.capitalize}'"
+        src = "has_many :#{fk['from_table'].downcase.pluralize}, :class_name => '#{fk['from_table'].capitalize}'"
         if connection.primary_key(table_name) == fk['from_column']
           src +=  ", :foreign_key => :#{fk['from_column']}"
         end
